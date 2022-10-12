@@ -14,26 +14,27 @@ public class HouseRobberII {
         temp2.add(arr[i]);
     }
 
-    System.out.println(Math.max(houseRobberIITabularWithSP(temp2, n - 1), houseRobberIITabularWithSP(temp1, n - 1)));
+    System.out.println(Math.max(houseRobberIITabularWithSP(temp2), houseRobberIITabularWithSP(temp1)));
 
   }
 
   // tabulation with space optimization
-  public static int houseRobberIITabularWithSP(ArrayList<Integer> nums, int n) {
-    int prev = nums.get(0);
+  public static long houseRobberIITabularWithSP(ArrayList<Integer> valueInHouse) {
+    int n = valueInHouse.size();
+    long prev = valueInHouse.get(0);
 
     if (n == 0)
       return prev;
 
-    int prev2 = 0;
+    long prev2 = 0;
 
     for (int i = 1; i < n; i++) {
-      int pick = nums.get(i);
+      long pick = valueInHouse.get(i);
       if (i > 1)
         pick += prev2;
 
-      int notPick = prev;
-      int currPick = Math.max(pick, notPick);
+      long notPick = prev;
+      long currPick = Math.max(pick, notPick);
       prev2 = prev;
       prev = currPick;
     }
