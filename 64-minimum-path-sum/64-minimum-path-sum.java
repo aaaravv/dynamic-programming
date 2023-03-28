@@ -1,29 +1,27 @@
-class Solution {
+class Solution { // bottom-up
     int n, m;
     public int minPathSum(int[][] grid) {
         m = grid.length;
         n = grid[0].length;
         
         int[][] dp = new int[m][n];
-        Arrays.stream(dp).forEach(ele -> Arrays.fill(ele, -1));
 
-        return minPathSum(0, 0, grid, dp);
-    }
-    public int minPathSum(int i, int j, int[][] grid, int[][] dp) {
-        if(i == m - 1 && j == n - 1) 
-            return dp[i][j] = grid[m-1][n-1];
+        // dp[i][j] depicts min path sum to reach [i][j] from [0][0]
         
-        if(dp[i][j] != -1)
-            return dp[i][j];
+        dp[0][0] = grid[0][0];
         
-        if(i == m - 1) // same row right col
-            return dp[i][j] = grid[i][j] + minPathSum(i, j+1, grid, dp);
+        // fill the 1st row
+        for(int col = 1; col < n; col++) 
+            dp[0][col] = grid[0][col] + dp[0][col-1];
         
-        if(j == n - 1) // same col down row
-            return dp[i][j] = grid[i][j] + minPathSum(i+1, j, grid, dp);
+        // fill the 1st col
+        for(int row = 1; row < m; row++)  
+            dp[row][0] = grid[row][0] + dp[row-1][0];
         
-        else 
-            return dp[i][j] = grid[i][j] + Math.min(minPathSum(i+1, j, grid, dp), minPathSum(i, j+1, grid, dp));
+        for(int row = 1; row < m; row++)
+            for(int col = 1; col < n; col++)
+                dp[row][col] = grid[row][col] + Math.min(dp[row-1][col], dp[row][col-1]);
         
+        return dp[m-1][n-1];
     }
 }
