@@ -1,17 +1,16 @@
-class Solution {    
+class Solution {
     public boolean isScramble(String s1, String s2) {
         Map<String, Boolean> dp = new HashMap<>();
-        return solve(s1, s2, dp);
+        return f(s1, s2, dp);
     }
-    
-    public boolean solve(String s1, String s2, Map<String, Boolean> dp) {
-        if(s1.length() != s2.length())
+    public boolean f(String s1, String s2, Map<String, Boolean> dp) {
+        if(s1.length() != s2.length()) // if both string aren't of equal length (i.e they aren't equal) 
             return false;
         
         if(s1.equals(s2))
-            return true;
+            return  true;
         
-        String key = s1 + "_" + s2;
+        String key = s1 + "_" + s2; // use of "_" due to these cases -> ab+cde, a+bcde (splitting isn't determined)
         
         if(dp.containsKey(key))
             return dp.get(key);
@@ -20,17 +19,16 @@ class Solution {
         
         int n = s1.length();
         
-        for(int i = 1; i < n; i++) {
-            boolean notSwap = solve(s1.substring(0, i), s2.substring(0, i), dp) &&
-                solve(s1.substring(i, n), s2.substring(i, n), dp);
+        for(int i = 1; i < n; i++) { // spliting at random index
+            // 'ab'cde, 'cd'eab
+            boolean notSwap = f(s1.substring(0, i), s2.substring(0, i), dp) && f(s1.substring(i), s2.substring(i), dp);
             
             if(notSwap) {
                 result = true;
                 break;
             }
-            
-            boolean swap = solve(s1.substring(0, i), s2.substring(n-i), dp) &&
-                solve(s1.substring(i), s2.substring(0, n-i), dp);
+            // 'ab'cde cde'ab'
+            boolean swap = f(s1.substring(0, i), s2.substring(n-i), dp) && f(s1.substring(i), s2.substring(0, n-i), dp);
             
             if(swap) {
                 result = true;
@@ -40,6 +38,6 @@ class Solution {
         
         dp.put(key, result);
         
-        return dp.get(key);
-    }
+        return result;
+    } 
 }
