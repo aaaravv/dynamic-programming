@@ -1,7 +1,7 @@
 class Solution {
     int m, n;
     int[][] apples;
-    int[][][] dp;
+    int[][][] dp; // row, col, k is changing
     int MOD = (int)1e9 + 7;
     
     public int ways(String[] pizza, int k) {
